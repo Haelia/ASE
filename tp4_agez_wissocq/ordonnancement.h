@@ -1,3 +1,5 @@
+#ifndef ORDH
+#define ORDH 1
 /*Enumération des différents états d'un contexte*/
 enum ctx_state{READY, ACTIVABLE, TERMINATED,BLOCKED};
 typedef void (func_t)(void *);
@@ -29,3 +31,5 @@ void yield();
 void f_ping(void *args);
 void f_pong(void *args);
 void start_sched();
+
+#endif

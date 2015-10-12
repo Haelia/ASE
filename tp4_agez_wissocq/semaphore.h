@@ -1,9 +1,11 @@
+#ifndef SEMH
+#define SEMH 1
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef ORDH
-#define ORDH 1
+//#ifndef ORDH
+//#define ORDH 1
 #include "ordonnancement.h"
-#endif
+//#endif
 
 struct sem_s {
     int tokens;
@@ -16,3 +18,4 @@ void sem_init(semt *sem, unsigned int val);
 void sem_down(semt *sem);
 void sem_up(semt *sem);
 
+#endif

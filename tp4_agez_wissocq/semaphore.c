@@ -1,7 +1,5 @@
-#ifndef SEMH
-#define SEMH 1
+
 #include "semaphore.h"
-#endif
 #include "hw.h"
 
 void sem_init(semt *sem, unsigned int val){
