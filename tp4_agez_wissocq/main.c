@@ -1,32 +1,36 @@
+#ifndef SEMH
+#define SEMH 1
 #include "semaphore.h"
+#endif
 #include "hw.h"
-
 #define N 100
 
 struct objet_s {
     char* nom;
     int n;
 };
+
+
 typedef struct objet_s objett;
 
-
 struct tampon_s {
-    objett *objets;
+    objett objets[N];
     int in;
     int out;
 };
 
-
 typedef struct tampon_s tampont;
 
-
-
 tampont *tampon;
-semt mutex, vide, plein;
+semt mutex;
+semt vide ;
+semt plein;
 
 
-void init_tampon(tampont *tampon, int size) {
-    tampon->objets = (objett *) malloc(size * sizeof(objett));
+
+void init_tampon(tampont *tampon, int s) {
+    tampon->in = 0;
+    tampon->out = 0;
 }
 
 
@@ -49,7 +53,6 @@ void mettre_objet(objett *objet) {
 void retirer_objet(objett *objet) {
     *objet = tampon->objets[tampon->out++];
 }
-
 
 void producteur() {
     objett objet;
@@ -78,20 +81,16 @@ void consommateur() {
     }
 }
 
-
-
-
-
-
 int main (int argc, char *argv[]) {
-    init_tampon(tampon, N);
-    sem_init(&mutex, 1);
-    sem_init(&vide, N);
-    sem_init(&plein, 0);
-    create_ctx(16384,producteur,NULL);
-    create_ctx(16384,consommateur,NULL);
-    start_sched();
-    return 0;
+  tampon = (tampont *) malloc(sizeof(tampont));
+  init_tampon(tampon, N);
+  sem_init(&mutex, 1);
+  sem_init(&vide, N);
+  sem_init(&plein, 0);
+  create_ctx(16384,producteur,NULL);
+  create_ctx(16384,consommateur,NULL);
+  start_sched();
+  return 0;
 }
 
 

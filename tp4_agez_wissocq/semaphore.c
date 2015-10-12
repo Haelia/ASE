@@ -1,4 +1,7 @@
+#ifndef SEMH
+#define SEMH 1
 #include "semaphore.h"
+#endif
 #include "hw.h"
 
 void sem_init(semt *sem, unsigned int val){
@@ -7,6 +10,7 @@ void sem_init(semt *sem, unsigned int val){
 }
 
 void sem_down(semt *sem) {
+    irq_disable();
     if (sem->tokens-- <= 0) {
         ctx_act->ctx_status = BLOCKED;
         ctx_act->next = sem->context->next;
@@ -16,9 +20,13 @@ void sem_down(semt *sem) {
         sem->context = ctx_act;
         yield();
     }
+    else{
+    irq_enable();
+    }
 }
 
 void sem_up(semt *sem) {
+    irq_disable();
     sem->tokens++;
     if (ctx_act->ctx_status = BLOCKED) {
         ctx_act->ctx_status = ACTIVABLE;
@@ -27,4 +35,5 @@ void sem_up(semt *sem) {
         ctx_act->next = NULL;
         ctx_act->prec = NULL;
     }
+    irq_enable();
 }

@@ -19,7 +19,7 @@ struct ctx_s{
 typedef struct ctx_s ctxt;
 
 /*Variable globale pointant sur le contexte activé en ce moment*/
-static ctxt *ctx_act = NULL;
+ctxt *ctx_act = NULL;
 
 
 int create_ctx(int stack_size, func_t f, void *args);
