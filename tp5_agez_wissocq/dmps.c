@@ -26,6 +26,10 @@ void toHexa(unsigned char * buffer) {
 
 
 int main (int argc, char ** argv) {
+  if(argc !=3){
+     printf("Format necessite 2 arguments: le cylindre et le secteur");
+    exit(EXIT_FAILURE);
+  }
   int i;
   unsigned int cylinder, sector;
   unsigned char buffer[BUFSIZE];
