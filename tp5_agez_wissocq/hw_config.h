@@ -9,5 +9,5 @@
 #define HDA_IRQ 14
 
 #define HDA_FILENAME "vdiskA.bin"
-#define HDA_SECTORSIZE 256
+#define HDA_SECTORSIZE 32
 #endif

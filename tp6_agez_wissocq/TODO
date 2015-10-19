@@ -8,3 +8,6 @@ Gestionnaire de MBR (a la fdisk)
 	    - Suppression ("trous")
 
 Tester le tout
+Un exemple : 
+-Ecrire des secteurs (cyl/sect), taille / contenu aléatoire
+-Relire et comparer
