@@ -1,0 +1,10 @@
+Structure MBR / DESC : volume
+load_mbr() (chargment + initialisation si besoin)
+Conversion (bloc logique, volume) -> (cyl, sect)
+Fonction read/write bloc logique
+Gestionnaire de MBR (a la fdisk)
+	/!\ - Partitions superposées
+	    - Partitions qui debordent
+	    - Suppression ("trous")
+
+Tester le tout
