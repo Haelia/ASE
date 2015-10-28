@@ -1,14 +1,12 @@
-ROOTDIR=/home/enseign/ASE
+ROOTDIR=.
 
 CC	= gcc
-CFLAGS	= -Wall -ansi -pedantic 
-CFLAGS  += -g -m32
-LIBDIR  = $(ROOTDIR)/lib
-INCDIR  = -I$(ROOTDIR)/include
-LIBS    = -L$(LIBDIR) -lhardware
+CFLAGS	= -Wall -ansi -pedantic -g
+LIBDIR	= $(ROOTDIR)/lib
+LIBS	= -L$(LIBDIR) -lhardware
 
 
-EXEC = mkhd dmps write format
+EXEC = dmps write format mkhd
 
 
 all: $(EXEC)
@@ -19,7 +17,7 @@ drive.o: drive.c drive.h
 	$(CC) -o $@ -c $< $(CFLAGS) $(LIBS)
 
 mkhd.o: mkhd.c
-	$(CC) -o $@ -c $< $(CFLAGS) $(INCDIR)
+	$(CC) -o $@ -c $< $(CFLAGS) $(LIBS)
 
 %.o : %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
@@ -42,32 +40,4 @@ format: format.o drive.o
 .PHONY: clean
 
 clean:
-	rm -rf *~ *.o *.bin format dmps write
-# CC=gcc
-# CFLAGS=-m32 -g
-# EXEC=dmps write format
-# CLIB=-L./lib -lhardware
-# 
-# all: $(EXEC)
-# 
-# drive.o: drive.c drive.h
-# 	$(CC) -o $@ -c $< $(CFLAGS) $(LIB)
-# 
-# %.o : %.c
-# 	$(CC) -o $@ -c $< $(CFLAGS)
-# 
-# dmps: dmps.o drive.o
-# 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
-# 
-# write: write.o drive.o
-# 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
-# 
-# format: format.o drive.o
-# 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
-# 
-# 
-# clean:
-# 	rm -rf *~ *.o *.bin format dmps write
-# 
-
-
+	rm -rf *~ *.o *.bin $(EXEC)

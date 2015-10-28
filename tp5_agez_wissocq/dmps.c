@@ -31,7 +31,7 @@ int main (int argc, char ** argv) {
     unsigned char buffer[BUFSIZE];
     
     if(argc !=3){
-        printf("Format necessite 2 arguments: le cylindre et le secteur");
+        printf("Format necessite 2 arguments: le cylindre et le secteur\n");
         exit(EXIT_FAILURE);
     }
 

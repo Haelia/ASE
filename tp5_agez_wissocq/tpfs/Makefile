@@ -1,7 +1,7 @@
 # $Id: Makefile,v 1.2 2004/10/12 09:06:17 marquet Exp $
 ##############################################################################
 
-ROOTDIR=/home/enseign/ASE
+ROOTDIR=..
 
 CC	= gcc
 CFLAGS	= -Wall -ansi -pedantic 
@@ -24,7 +24,7 @@ all: $(BINARIES) $(OBJECTS)
 ### Main rules 
 ###------------------------------------------------------------
 mkhd.o: mkhd.c
-	$(CC) $(CFLAGS) -c mkhd.c $(INCDIR)
+	$(CC) $(CFLAGS) -c mkhd.c $(LIBS)
 
 mkhd: mkhd.o
 	$(CC) $(CFLAGS) -o mkhd mkhd.o $(LIBS)
