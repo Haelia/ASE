@@ -1,7 +1,7 @@
 #ifndef _HW_CONFIG_H_
 #define _HW_CONFIG_H_
 
-#define HARDWARE_INI	"etc/hardware.ini"
+#define HARDWARE_INI	"hardware.ini"
 
 #define ENABLE_HDA 1
 #define CMD_REG 0x3F6

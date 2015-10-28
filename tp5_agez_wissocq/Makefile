@@ -37,7 +37,10 @@ format: format.o drive.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 
-.PHONY: clean
+.PHONY: clean realclean
 
 clean:
+	rm -rf *~ *.o $(EXEC)
+
+realclean:
 	rm -rf *~ *.o *.bin $(EXEC)
