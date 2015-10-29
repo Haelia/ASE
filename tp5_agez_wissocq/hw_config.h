@@ -10,4 +10,6 @@
 
 #define HDA_FILENAME 	"vdiskA.bin"
 #define HDA_SECTORSIZE 	256
+#define HDA_MAXSECTOR	16
+#define HDA_MAXCYLINDER	16
 #endif

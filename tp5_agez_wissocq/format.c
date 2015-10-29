@@ -15,16 +15,11 @@ static void nothing(){
 
 int main (int argc, char ** argv) {
 	int i;
-	unsigned int cylinder, sector,nsector,value;
-	if(argc !=5){
-		printf("Format necessite 4 arguments: le cylindre, le secteur, le nombre de secteur et la nouvelle valeur");
+	
+	if(argc != 1){
+		printf("format ne prend pas d'argument. Il écrit la valeur 0 sur tout le disque");
 		exit(EXIT_FAILURE);
 	}
-
-	cylinder = atoi(argv[1]);
-	sector = atoi(argv[2]);
-	nsector = atoi(argv[3]);
-	value = atoi(argv[4]);
 
 	if (init_hardware(HARDWARE_INI) == 0) {
 		printf("Erreur lors de l'initialisation du hardware");
@@ -33,6 +28,7 @@ int main (int argc, char ** argv) {
 	
 	for(i = 0; i < 15; i++)
 		IRQVECTOR[i] = nothing;
-	format_sector(cylinder,sector,nsector,value);
+	for (i = 0; i < HDA_MAXCYLINDER; i++)
+		format_sector(i, 0, HDA_MAXSECTOR, 0);
 	exit(EXIT_SUCCESS);
 }
