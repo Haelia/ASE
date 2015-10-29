@@ -9,27 +9,30 @@
 
 /* Fonction permettant de remplacer les interruptions */
 static void nothing(){
-  return;
+	return;
 }
 
 
 int main (int argc, char ** argv) {
-    int i;
-  unsigned int cylinder, sector,nsector,value;
-  if(argc !=5){
-     printf("Format necessite 4 arguments: le cylindre, le secteur, le nombre de secteur et la nouvelle valeur");
-    exit(EXIT_FAILURE);
-  }
-  
-  cylinder = atoi(argv[1]);
-  sector = atoi(argv[2]);
-  nsector=atoi(argv[3]);
-  value=atoi(argv[4]);
-  
-  
-  assert(init_hardware(HARDWARE_INI));
-  for(i = 0; i < 15; i++)
-    IRQVECTOR[i] = nothing;
-  format_sector(cylinder,sector,nsector,value);
-  exit(EXIT_SUCCESS);
+	int i;
+	unsigned int cylinder, sector,nsector,value;
+	if(argc !=5){
+		printf("Format necessite 4 arguments: le cylindre, le secteur, le nombre de secteur et la nouvelle valeur");
+		exit(EXIT_FAILURE);
+	}
+
+	cylinder = atoi(argv[1]);
+	sector = atoi(argv[2]);
+	nsector = atoi(argv[3]);
+	value = atoi(argv[4]);
+
+	if (init_hardware(HARDWARE_INI) == 0) {
+		printf("Erreur lors de l'initialisation du hardware");
+		exit(EXIT_FAILURE);
+	}
+	
+	for(i = 0; i < 15; i++)
+		IRQVECTOR[i] = nothing;
+	format_sector(cylinder,sector,nsector,value);
+	exit(EXIT_SUCCESS);
 }
