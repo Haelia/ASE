@@ -4,7 +4,7 @@
 #include "hw_config.h"
 #include "drive.h"
 
-void seek (unsigned int cylinder, unsigned int sector) {
+void seek (const unsigned int cylinder, const unsigned int sector) {
 	_out(HDA_DATAREGS, (cylinder >> 8) & 0xFF);
 	_out(HDA_DATAREGS + 1, (cylinder) & 0xFF);
 	_out(HDA_DATAREGS + 2, (sector >> 8) & 0xFF);
@@ -13,7 +13,7 @@ void seek (unsigned int cylinder, unsigned int sector) {
 	return;
 }
 
-void read_sector(unsigned int cylinder,unsigned int sector, unsigned char *buffer) {
+void read_sector(const unsigned int cylinder, const unsigned int sector, unsigned char *buffer) {
 	int i;
 	seek(cylinder, sector);
 	_sleep(HDA_IRQ);
@@ -26,7 +26,7 @@ void read_sector(unsigned int cylinder,unsigned int sector, unsigned char *buffe
 	return;
 }
 
-void write_sector(unsigned int cylinder, unsigned int sector, const unsigned char *buffer) {
+void write_sector(const unsigned int cylinder, const unsigned int sector, const unsigned char *buffer) {
 	int i;
 	seek(cylinder, sector);
 	_sleep(HDA_IRQ);
@@ -40,7 +40,7 @@ void write_sector(unsigned int cylinder, unsigned int sector, const unsigned cha
 	return;
 }
 
-void format_sector(unsigned int cylinder,unsigned int sector, unsigned int nsector, unsigned int value) {
+void format_sector(const unsigned int cylinder, const unsigned int sector, const unsigned int nsector, const unsigned int value) {
 	int i;
 	seek(cylinder, sector);
 	_sleep(HDA_IRQ);

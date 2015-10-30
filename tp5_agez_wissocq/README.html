@@ -1,0 +1,23 @@
+<p>Adrien Agez <br/>
+Sarah Wissocq</p>
+
+<h1>Compilation</h1>
+
+<p><code>make</code> : compile la bibliothèque drive.c et les commandes <code>dmps</code>, <code>format</code> et <code>write</code></p>
+
+<h1>Utilisation</h1>
+
+<ul>
+<li><code>./dmps [cyl] [sect]</code> affiche les octets du secteur du disque à la position demandée (en format hexadécimal)</li>
+<li><code>./format</code> détruit toutes les données et place tous les octets du disque à <code>0x00</code></li>
+<li><code>./write [cyl] [sect]</code> écrit la valeur <code>0xdeadbeef</code> en boucle sur tout le secteur. Il permet de tester l'écriture de la bibliothèque <code>drive.c</code></li>
+</ul>
+
+<hr />
+
+<p>Le disque (vdiskA.bin) est créé lors du premier appel à l'une des commandes. Il dispose de 16 cylindres, chacun d'eux contenant 16 secteurs de 256 octets.</p>
+
+<ul>
+<li><code>make clean</code> supprime tous les fichiers objets et executables</li>
+<li><code>make realclean</code> supprime en plus vdiskA.bin</li>
+</ul>
