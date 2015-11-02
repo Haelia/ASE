@@ -2,8 +2,9 @@
 #define _MBR_H_
 
 #define MAX_VOLUMES 8
+#define MAGIC 666
 
-//Structures
+/* Structures */
 
 /**
  * Définit les différents types de volumes
@@ -27,27 +28,22 @@ typedef struct vol_s vol_t;
  * Définit la MBR du disque, contenant la liste des volumes
  */
 struct mbr_s {
-	unsigned short int nbVol;
+        unsigned int magic;
+	unsigned int nbVol;
 	vol_t volumes[MAX_VOLUMES];
 };
 typedef struct mbr_s mbr_t;
 
-// Fonctions
+/* Fonctions */
 
 /**
  * Charge la MBR du disque
- * @param mbr La structure à remplir avec les données de la MBR
  */
-void load_mbr(mbr_t mbr);
+void load_mbr();
 
-/**
- * Convertit un numéro de bloc logique en secteur physique
- * @param vol Le numéro de volume
- * @param bloc Le numéro de bloc
- * @param cyl l'adresse de l'endroit ou le numéro de cylindre sera placé
- * @param sect l'adresse de l'endroit ou le numéro de secteur sera placé
- */
-void to_physical(int vol, int bloc, int *cyl, int *sect);
+void save_mbr();
+
+
 
 
 #endif

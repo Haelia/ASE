@@ -5,7 +5,7 @@
 #include "hw_config.h"
 #include <assert.h>
 
-#define BUFSIZE 256
+#define BUFSIZE HDA_SECTORSIZE
 
 /* Fonction permettant de remplacer les interruptions */
 static void nothing(){

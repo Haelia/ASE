@@ -1,12 +1,12 @@
 ROOTDIR	= .
 
 CC	= gcc
-CFLAGS	= -Wall -ansi -pedantic -g
+CFLAGS	= -Wall -ansi -pedantic -g -m32
 LIBDIR	= $(ROOTDIR)/lib
 LIBS	= -L$(LIBDIR) -lhardware
 
 
-EXEC = dmps write format
+EXEC = dmps write format mbr
 
 
 all: $(EXEC)
@@ -32,6 +32,8 @@ write: write.o drive.o
 format: format.o drive.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
+mbr : mbr.o drive.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean realclean
 
