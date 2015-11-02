@@ -28,7 +28,7 @@ typedef struct vol_s vol_t;
  * Définit la MBR du disque, contenant la liste des volumes
  */
 struct mbr_s {
-        unsigned int magic;
+    unsigned int magic;
 	unsigned int nbVol;
 	vol_t volumes[MAX_VOLUMES];
 };

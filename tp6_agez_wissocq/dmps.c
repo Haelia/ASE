@@ -17,6 +17,8 @@ void toHexa(unsigned char * buffer) {
 	for (i = 0; i < BUFSIZE/16; i++) {
 		printf("%04x :",i*16);
 		for (j = 0; j < 16; j++) {
+			if (j%4 == 0)
+				printf("  ");
 			printf(" %02x",buffer[i*16+j]);
 		}
 		printf("\n");
