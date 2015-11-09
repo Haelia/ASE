@@ -29,11 +29,10 @@ void save_mbr() {
     write_sector(0, 0, buf);
 }
 
-
+/* Permet de  vérifier que ça fonctionne
 int main(int argc, char** argv) {
     int i;
 	unsigned char buf[BUFSIZE];
-    /* initialisation hardware */
     if(init_hardware(HARDWARE_INI) == 0) {
             fprintf(stderr, "Erreur lors de l'initialisation du hardware\n");
             exit(EXIT_FAILURE);
@@ -60,16 +59,11 @@ int main(int argc, char** argv) {
 		buf[4*i+2] = 0xBE;
 		buf[4*i+3] = 0xEF;
 	}
-	write_bloc(0, 0, buf);	/* OK : cyl 0, sect 1  */
-	write_bloc(1, 0, buf);	/* OK : cyl 0, sect 11 */
-	write_bloc(1, 5, buf);	/* KO : cyl 1, sect 0  */
+	write_bloc(0, 0, buf);
+	write_bloc(1, 0, buf);
+	write_bloc(1, 5, buf);
 	
     free(disk_mbr);
     return 0;
 }
-
-
-
-
-
-
+*/

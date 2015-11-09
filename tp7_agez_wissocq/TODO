@@ -8,3 +8,12 @@ Idées de tests (liste non exhaustive)
 Faire une fonction (verifbloc) qui parcoure la liste chainée de blocs libres et vérifie que leur nombre concorde avec ce qui est indiqué dans le superbloc
 Allouer / libérer des blocs en boucle et vérifier avec verifbloc entre chaque appel
 Tester le cas "disque plein" (voir PDF)
+
+
+
+Structure Inode + blocs indirect/ double indirect
+read/write inode
+create_inode (Allouer bloc, init struct, écrire)
+delete_inode (libérer bloc inode + blocs de données)
+vbloc_of-fbloc (version 1 et 2)
+ -> position bloc fichier -> n°bloc

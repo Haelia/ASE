@@ -36,4 +36,7 @@ void write_sector(const unsigned int cylinder, const unsigned int sector, const 
 void format_sector(const unsigned int cylinder, const unsigned int sector, const unsigned int nsector, const unsigned int value);
 
 
+void read_sectorn(unsigned int cylinder,unsigned int sector, unsigned char *buffer, unsigned int bufsize);
+void write_sectorn(unsigned int cylinder, unsigned int sector, const unsigned char *buffer, unsigned int bufsize);
+
 #endif
