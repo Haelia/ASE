@@ -32,7 +32,7 @@ write: write.o drive.o
 format: format.o drive.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-mbr : mbr.o drive.o
+mbr : mbr.o drive.o vol.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean realclean
