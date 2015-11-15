@@ -65,9 +65,9 @@ void save_super();
 
 void init_super(unsigned int vol, char* name);
 
-void read_inode(int bloc, inode_t *inode);
+void read_inode(int vol, int bloc, inode_t *inode);
 
-void write_inode(int bloc, inode_t *inode);
+void write_inode(int vol, int bloc, inode_t *inode);
 
 int create_inode(enum type_t type);
 

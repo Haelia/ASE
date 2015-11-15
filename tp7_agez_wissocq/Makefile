@@ -1,7 +1,7 @@
 ROOTDIR	= .
 
 CC	= gcc
-CFLAGS	= -Wall -ansi -pedantic -g -m32
+CFLAGS	= -Wall -pedantic -g -m32
 LIBDIR	= $(ROOTDIR)/lib
 LIBS	= -L$(LIBDIR) -lhardware
 

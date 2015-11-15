@@ -29,7 +29,7 @@ void save_mbr() {
     write_sector(0, 0, buf);
 }
 
-/* Permet de  vérifier que ça fonctionne
+/* Permet de  vérifier que ça fonctionne*/
 int main(int argc, char** argv) {
     int i;
 	unsigned char buf[BUFSIZE];
@@ -66,4 +66,3 @@ int main(int argc, char** argv) {
     free(disk_mbr);
     return 0;
 }
-*/
