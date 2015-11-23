@@ -3,6 +3,8 @@
 #include "hw_config.h"
 
 
+#define TLB_ENTRIES 32
+
 struct tlb_entry_s {
 	int RFU:8;
 	int vpage:12;
@@ -11,8 +13,9 @@ struct tlb_entry_s {
 	int write:1;
 	int read:1;
 };
-
 typedef tlb_entry_s tlb_entry;
+
+
 
 static int ppage_of_vadd(int process, unsigned vadd) {
 	int vpage;
@@ -21,3 +24,9 @@ static int ppage_of_vadd(int process, unsigned vadd) {
 		return vpage * 2 + 1 + process	
 	return -1;
 }
+
+
+void handler() {
+	
+}
+
