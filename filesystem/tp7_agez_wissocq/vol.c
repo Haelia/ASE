@@ -20,6 +20,10 @@ void to_physical(int vol, int bloc, int *cyl, int *sect) {
     }
 }
 
+/* ***************************
+ * Lecture écriture de blocs *
+ * ***************************/
+
 void read_bloc(const unsigned int vol, const unsigned int bloc, unsigned char* buffer) {
     int sector, cylinder;
     to_physical(vol, bloc, &cylinder, &sector);
@@ -62,49 +66,58 @@ void write_blocn(unsigned int vol, unsigned int bloc, unsigned char *buffer, uns
     write_sectorn(cylinder_of_bloc(vol,bloc), sector_of_bloc(vol,bloc), buffer, bufsize);
 }
 
+
+/* ***********
+ * Superbloc *
+ * ***********/
+
 void load_super(unsigned int vol) {
-    read_blocn(vol,0,(unsigned char*) &superbloc,sizeof(struct superbloc_s));
+    read_blocn(vol, 0, (unsigned char*) &superbloc, sizeof(struct superbloc_s));
     current_vol = vol;
     return;
 }
 
 void save_super() {
-    write_blocn(current_vol,0,(unsigned char *) &superbloc, sizeof(struct superbloc_s));
+    write_blocn(current_vol, 0, (unsigned char *) &superbloc, sizeof(struct superbloc_s));
 }
 
-/* initialise le superbloc*/
+/** initialise le superbloc */
 void init_super(unsigned int vol, char* name) {
-    int i;
+    int i, size;
     load_super(vol);
     if (superbloc.magic == MAGIC_SB) {
         printf("Superbloc déjà initialisé.\n");
         exit(EXIT_FAILURE);
     }
     else {
-        int l;
         superbloc.magic = MAGIC_SB;
         strncpy(superbloc.name, name, MAX_TAILLE);
         superbloc.first_free_bloc = 1;
         superbloc.root = 0;
         superbloc.nb_free = disk_mbr->volumes[vol].size-1;
         save_super(vol);
-        for (i = 1, l = disk_mbr->volumes[vol].size; i < l; i++) {
-        struct freebloc_s fb;
-        fb.next = (i+1)%disk_mbr->volumes[vol].size;
-        fb.magic = MAGIC_FREE;
-        write_blocn(vol, i, (unsigned char *) &fb, sizeof(struct freebloc_s));
+        for (i = 1, size = disk_mbr->volumes[vol].size; i < l; i++) {
+			struct freebloc_s fb;
+			fb.next = (i+1) % size;
+			fb.magic = MAGIC_FREE;
+			write_blocn(vol, i, (unsigned char *) &fb, sizeof(struct freebloc_s));
         }
     }
 }
+
+
+/* ***********************
+ * Manipulation de blocs *
+ * ***********************/
 
 unsigned int new_bloc(){
     int res;
     struct freebloc_s fb;
     if (superbloc.nb_free == 0){
-    /*Plus de place pour créer un nouveau bloc*/
+    /* Plus de place pour créer un nouveau bloc */
         return -1;
     }
-    /*Récupère la position du premier bloc libre*/
+    /* Récupère la position du premier bloc libre */
     res = superbloc.first_free_bloc;
     read_blocn(current_vol, res, (unsigned char *) &fb, sizeof(struct freebloc_s));
     superbloc.first_free_bloc = fb.next;
