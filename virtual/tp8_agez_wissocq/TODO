@@ -1,0 +1,6 @@
+Handler mmu : 
+- Récupérer adresse fautive
+- VPage valide ? non -> Terminer processus
+- Ajouter entrée TLB : vpage -> ppage
+
+/!\ TABLE 2 : ordre CROISSANT
