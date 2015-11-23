@@ -9,27 +9,27 @@ unsigned int current_vol;
 struct superbloc_s superbloc;
 
 struct superbloc_s {
-  int magic;
-  unsigned int serialn;
-  char name[MAX_TAILLE];
-  unsigned int first_free_bloc;
-  unsigned int root;
-  int nb_free;
+    int magic;
+    unsigned int serialn;
+    char name[MAX_TAILLE];
+    unsigned int first_free_bloc;
+    unsigned int root;
+    int nb_free;
 };
 
 struct freebloc_s {
-  unsigned int next;
-  int magic;
+    unsigned int next;
+    int magic;
 };
 
 enum type_t {DIR, FICHIER};
 
 struct inode_s{
-enum type_t type;
-int direct[112];
-int indirect;
-int double_indirect;
-int taille;    
+    enum type_t type;
+    int direct[112];
+    int indirect;
+    int double_indirect;
+    int taille;    
 };
 
 typedef struct inode_s inode_t;
