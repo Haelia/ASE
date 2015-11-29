@@ -7,6 +7,10 @@
 #include "hw_config.h"
 #include <assert.h>
 
+#define NB_DIRECT (256 - 5*sizeof(int))/sizeof(int)
+#define NB_INDIRECT 256/sizeof(int)
+#define NB_TOTAL (NB_DIRECT + NB_INDIRECT + NB_INDIRECT*NB_INDIRECT)
+
 extern mbr_t *disk_mbr;
 
 void to_physical(int vol, int bloc, int *cyl, int *sect) {
@@ -96,7 +100,7 @@ void init_super(unsigned int vol, char* name) {
         superbloc.root = 0;
         superbloc.nb_free = disk_mbr->volumes[vol].size-1;
         save_super(vol);
-        for (i = 1, size = disk_mbr->volumes[vol].size; i < l; i++) {
+        for (i = 1, size = disk_mbr->volumes[vol].size; i < size; i++) {
 			struct freebloc_s fb;
 			fb.next = (i+1) % size;
 			fb.magic = MAGIC_FREE;
@@ -170,11 +174,149 @@ int create_inode(enum type_t type){
     write_inode(current_vol, bloc,&inode);
     return bloc;
 }
-/*
-void delete_inode(int bloc){
-    int i;
-    for(i=0;i<112;i++){
-        free(inode.direct[i]);
+
+int delete_inode (unsigned int inumber) {
+  int i,j;
+  struct inode_s inode;
+  unsigned char buf1[256];
+  unsigned char buf2[256];
+
+  read_inode(current_vol, inumber,&inode);
+  // direct blocks
+  for (i = 0; i < NB_DIRECT; i++){
+    if (inode.direct[i]) {
+      free_bloc(inode.direct[i]);
     }
+  }
+
+  // indirect blocks
+  if (inode.indirect) {
+    read_bloc(current_vol, inode.indirect, buf1);
+    for (i = 0; i < NB_INDIRECT; i++) {
+      if (buf1[i]) {
+        free_bloc(buf1[i]);
+      }
+    }
+    free_bloc(inode.indirect);
+  }
+
+  // indirect_double blocks
+  if (inode.double_indirect) {
+    read_bloc(current_vol, inode.double_indirect, buf1);
+    for (i = 0; i < NB_INDIRECT; i++) {
+      if (buf1[i]) {
+        read_bloc(current_vol, buf1[i], buf2);
+        for (j = 0; j < NB_INDIRECT; i++) {
+          if (buf2[j]) {
+            free_bloc(buf2[j]);
+          }
+        }
+        free_bloc(buf1[i]);
+      }
+    }
+    free_bloc(inode.double_indirect);
+  }
+
+  free_bloc(inumber);
+  return 1;
 }
-*/
+
+unsigned int read_indirect(unsigned int ind, unsigned int fbloc, int do_allocate) {
+  int entries_direct[256];
+  read_bloc(current_vol, ind, (unsigned char *) entries_direct);
+  if (entries_direct[fbloc] == 0 && do_allocate) {
+    entries_direct[fbloc] = new_bloc();
+    if (entries_direct[fbloc] == -1) {
+      fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+      return 0;
+    }
+    write_bloc(current_vol, ind, (unsigned char *) entries_direct);
+  }
+  return entries_direct[fbloc];
+}
+
+unsigned int read_indirect_double(unsigned int ind_double, unsigned int fbloc, int do_allocate) {
+  int entries_indirect[256];
+  unsigned int res;
+  // load first indirection in entries_indirect
+  read_bloc(current_vol, ind_double, (unsigned char *) entries_indirect);
+  if (entries_indirect[fbloc/NB_INDIRECT] == 0) {
+    if (!do_allocate){
+      return 0;
+    }
+    else {
+      entries_indirect[fbloc/NB_INDIRECT] = new_bloc();
+      if (entries_indirect[fbloc/NB_INDIRECT] == - 1) {
+        fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+        return 0;
+      }
+      write_bloc(current_vol, ind_double, (unsigned char *) entries_indirect);
+    }
+  }
+  // load second indirection in entries_indirect
+  res = entries_indirect[fbloc/NB_INDIRECT];
+  read_bloc(current_vol, res, (unsigned char *) entries_indirect);
+  if (entries_indirect[fbloc%NB_INDIRECT] == 0) {
+    if (!do_allocate) {
+      return 0;
+    }
+    else {
+      entries_indirect[fbloc%NB_INDIRECT] = new_bloc();
+      if (entries_indirect[fbloc%NB_INDIRECT] == - 1) {
+        fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+        return 0;
+      }
+      write_bloc(current_vol, res, (unsigned char *) entries_indirect);
+    }
+  }
+  return entries_indirect[fbloc%NB_INDIRECT];
+}
+
+unsigned int vbloc_of_fbloc(unsigned int inumber, unsigned int fbloc, int do_allocate) {
+  inode_t inode;
+  read_inode(current_vol, inumber, &inode);
+  if (fbloc < NB_DIRECT) { // searching in direct entries
+    if ((inode.direct[fbloc] == 0) && do_allocate) {
+      inode.direct[fbloc] = new_bloc();
+      if (inode.direct[fbloc] == -1) {
+        fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+        return 0;
+      }
+      write_inode(current_vol, inumber, &inode);
+    }
+    return inode.direct[fbloc];
+  }
+  else if (fbloc < (NB_DIRECT + NB_INDIRECT)) { // searching in indirect entries
+    if (inode.indirect == 0) {
+      if (!do_allocate){
+        return 0;
+      }
+      else {
+        inode.indirect = new_bloc();
+        if (inode.double_indirect == -1) {
+          fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+          return 0;
+        }
+        write_inode(current_vol, inumber, &inode);
+      }
+    }
+    return read_indirect(inode.indirect, fbloc - NB_DIRECT,do_allocate);
+  }
+  else if (fbloc < NB_TOTAL) { // searching in indirect double entries
+    if (inode.double_indirect == 0) {
+      if (!do_allocate){
+        return 0;
+      }
+      else {
+        inode.double_indirect = new_bloc();
+        if (inode.double_indirect == -1) {
+          fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+          return 0;
+        }
+        write_inode(current_vol, inumber, &inode);
+      }
+    }
+    return read_indirect_double(inode.double_indirect, fbloc-(NB_DIRECT+NB_INDIRECT), do_allocate);
+  }
+  return 0;
+}

@@ -15,5 +15,8 @@ Structure Inode + blocs indirect/ double indirect
 read/write inode
 create_inode (Allouer bloc, init struct, écrire)
 delete_inode (libérer bloc inode + blocs de données)
-vbloc_of-fbloc (version 1 et 2)
+vbloc_of-fbloc (version 1 et 2) 
+
+TO FINISHED : 
  -> position bloc fichier -> n°bloc
++Test

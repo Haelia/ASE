@@ -71,6 +71,7 @@ void write_inode(int vol, int bloc, inode_t *inode);
 
 int create_inode(enum type_t type);
 
-void delete_inode(int bloc);
+int delete_inode(unsigned int inumber);
 
+unsigned int vbloc_of_fbloc(unsigned int inumber, unsigned int fbloc, int do_allocate);
 #endif
