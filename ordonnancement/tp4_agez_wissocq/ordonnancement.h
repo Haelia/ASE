@@ -1,5 +1,5 @@
 #ifndef ORDH
-#define ORDH 1
+#define ORDH
 /*Enumération des différents états d'un contexte*/
 enum ctx_state{READY, ACTIVABLE, TERMINATED,BLOCKED};
 typedef void (func_t)(void *);
@@ -21,7 +21,7 @@ struct ctx_s{
 typedef struct ctx_s ctxt;
 
 /*Variable globale pointant sur le contexte activé en ce moment*/
-ctxt *ctx_act = NULL;
+ctxt *ctx_act;
 
 
 int create_ctx(int stack_size, func_t f, void *args);

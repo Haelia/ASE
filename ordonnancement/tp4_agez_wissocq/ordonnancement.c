@@ -3,10 +3,7 @@
 #include <assert.h>
 #include "hw.h"
 #define MAGIC 42
-//#ifndef ORDH
-//#define ORDH 1
 #include "ordonnancement.h"
-//#endif
 
 int create_ctx(int stack_size, func_t f, void *args){
   irq_disable();

@@ -79,6 +79,7 @@ void consommateur() {
 }
 
 int main (int argc, char *argv[]) {
+  ctx_act=NULL;
   tampon = (tampont *) malloc(sizeof(tampont));
   init_tampon(tampon, N);
   sem_init(&mutex, 1);

@@ -1,4 +1,3 @@
-
 #include "semaphore.h"
 #include "hw.h"
 
